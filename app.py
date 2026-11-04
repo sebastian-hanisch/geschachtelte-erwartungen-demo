@@ -69,7 +69,7 @@ with st.container(key="kopf"):
 st.markdown(
     """
 Wer **E_X[ f( E_Y[ g(X, Y) | X ] ) ]** braucht (den Wert einer Information, ein Risikomaß, einen Sensitivitätsindex), kann die innere Erwartung nicht durch eine Ziehung ersetzen, sobald f nicht linear ist: das **geschachtelte Monte Carlo** zieht N äußere und je M innere Werte und wertet f am inneren Mittel aus.
-Die Verzerrung fällt nur wie 1/M, also braucht man M ∝ ε⁻¹ und N ∝ ε⁻²: Kosten ε⁻³. **Multilevel** nimmt M_l = 2^l innere Ziehungen je Ebene und koppelt die Ebenen **antithetisch** (die grobe Stufe nutzt beide Hälften der inneren Ziehungen): die Differenzen streuen wenig, und bei glatter oder geknickter äußerer Funktion sinken die Kosten auf etwa ε⁻².
+Die Verzerrung fällt nur wie 1/M, also braucht man M ∝ ε⁻¹ und N ∝ ε⁻²: Kosten ε⁻³. **Multilevel** nimmt M_l = 2^l innere Ziehungen je Ebene und koppelt die Ebenen **antithetisch** (die grobe Stufe nutzt beide Hälften der inneren Ziehungen): die Differenzen streuen wenig, und beim Mittelwert sinken die Kosten auf etwa ε⁻², beim Knick auf wenig mehr.
 Bei einem **Sprung** gelingt das nicht; bei lockerer Toleranz und schwachem Signal gewinnt das einfache Schachteln, und ist die innere Erwartung bekannt, ist beides Verschwendung.
 
 Weiter unten: **🔬 fünf Experimente**, **🧪 Spielwiese**, **🚧 Wo die Annahmen enden** und die Expander **⚠️ Annahmen, Grenzen und bekannte Probleme** und **📐 Mathematische Formulierung**.
@@ -84,7 +84,7 @@ Die Nachfrage D = exp(σ(ρX + √(1−ρ²)Y)) hängt von einem **Signal** X (a
 1. **Geschachtelt:** N äußere Ziehungen X_i, je M innere Y_ij; Schätzer f(Mittel_j g(X_i, Y_ij)). Das Mittel streut um μ(X_i), und f ist nichtlinear: die Verzerrung ist ≈ c/M (beim Quadrat exakt E Var(g | X)/M). Für Fehler ε braucht man M ≈ ε⁻¹ und N ≈ ε⁻² äußere Ziehungen.
 2. **Multilevel:** Ebene l hat M = 2^l innere Ziehungen. Y_l = f(Mittel aller M) − ½(f(Mittel der ersten Hälfte) + f(Mittel der zweiten Hälfte)) (**antithetisch**). Die Teleskopsumme E[P_L] = E[P_0] + Σ E[Y_l] wird mit eigenen äußeren Ziehungen je Ebene geschätzt; je kleiner V_l = Var Y_l, desto weniger Ziehungen auf den teuren Ebenen.
 3. **Andere Kopplungen** zum Vergleich: **einseitig** (grob = f(Mittel der ersten Hälfte)) und **unabhängig** (grob = f(Mittel frischer innerer Ziehungen)). Nur die antithetische hebt die Rate.
-4. **Bedingt:** wäre μ(X) bekannt, würde man f(μ(X)) direkt mitteln; das ist die Grenze nach unten für jedes Schachteln.
+4. **Bedingt:** wäre μ(X) bekannt, würde man f(μ(X)) direkt mitteln; im Kostenmodell (eine Auswertung je äußere Ziehung) ist das die Grenze nach unten für jedes Schachteln.
         """
     )
 
@@ -241,11 +241,11 @@ st.markdown(
 | Annahme | Was passiert, wenn sie verletzt ist | Wer setzt an |
 |---|---|---|
 | **Die innere Erwartung ist nur durch Simulation zu haben** | Ist sie geschlossen bekannt, genügt eine Auswertung je äußerer Ziehung: 14- bis 640-mal billiger als Multilevel (Experiment 2, Spalte »bedingt«). | Stück 6 |
-| **Die Ebenen sind antithetisch gekoppelt** | Mit einseitiger oder unabhängiger Kopplung fällt die Ebenenvarianz nur mit 2^(−l) statt 2^(−2l) (Mittelwert) bzw. 2^(−1,5 l) (Knick); der Gewinn schrumpft oder verschwindet (Experiment 1, Preset »Ohne Antithetik«). | Stück 2 |
-| **Die äußere Funktion ist glatt oder geknickt** | Bei einem Sprung fällt die Ebenenvarianz nur mit 2^(−l/2): Multilevel kostet im Idealfall mehr als einfaches Schachteln (Preset »Sprung«). | – |
+| **Die Ebenen sind antithetisch gekoppelt** | Mit einseitiger oder unabhängiger Kopplung fällt die Ebenenvarianz nur mit etwa 2^(−l) (gemessen 1,0 bis 1,2) statt mit 2^(−2,06 l) (Mittelwert) bzw. 2^(−1,33 l) (Knick); der Gewinn schrumpft oder verschwindet (Experiment 1, Preset »Ohne Antithetik«). | Stück 2 |
+| **Die äußere Funktion ist glatt oder geknickt** | Bei einem Sprung fällt die Ebenenvarianz nur mit etwa 2^(−l/2): Multilevel kostet bei den gezeigten Toleranzen und ρ = 0,6 im Idealfall mehr als einfaches Schachteln, bei sehr enger Toleranz oder starkem Signal nicht mehr (Experiment 4, Preset »Sprung«). | – |
 | **Die Toleranz ist eng genug** | Bei lockerem ε kostet der Pilot mehr, als er spart (Experiment 3). | – |
 | **Das Signal ist stark genug** | Bei kleiner Signalstärke dominiert die Ebene 0, und der Gewinn schrumpft (Experiment 4, Preset »Schwaches Signal«). | – |
-| **Der Abbruchfehler stört** | Der entzerrte Schätzer verzichtet auf die Ebenenwahl, braucht dafür β > γ; beim Sprung wächst seine Varianz für jedes s (Experiment 5). | Stück 12 |
+| **Der Abbruchfehler stört** | Der entzerrte Schätzer verzichtet auf die Ebenenwahl, braucht dafür γ < s < β; beim Sprung wächst seine Varianz für jedes s (Experiment 5). | Stück 12 |
 """
 )
 
@@ -258,7 +258,7 @@ Kosten zählen innere Auswertungen, nicht Laufzeit; die äußere Ziehung zählt 
 **Grenzen.** Es gibt nur **ein Modell** und drei äußere Funktionen; **keinen Entscheidungsfall** (Minimum über mehrere Aktionen wie beim Wert der Information), keine mehrdimensionalen Eingaben, keine Tiefe über zwei Stufen, keine adaptiven inneren Stichproben und kein Quasi-Monte-Carlo.
 Giles' Verfahren läuft mit fest angesetzter schwacher Ordnung 1; die Rate β wird für die Kostenrechnung aus den Ebenen ab 3 geschätzt. **Geschachteltes Monte Carlo ist mit Orakelwissen gerechnet** (es kennt M und die Varianz) und wird dadurch begünstigt.
 
-**Bekannte Probleme und Unsicherheiten.** Die Ebenenvarianz beim Sprung beruht auf seltenen Ereignissen und ist mit 40.000 äußeren Ziehungen nur grob messbar (hohe Kurtosis); die Verzerrungskonstante rauscht, die Verzerrung beim Sprung liegt ab Ebene 5 im Rauschen.
+**Bekannte Probleme und Unsicherheiten.** Die Ebenenvarianz beim Sprung beruht auf seltenen Ereignissen und ist mit 40.000 äußeren Ziehungen nur grob messbar (hohe Kurtosis); die Verzerrungskonstante rauscht, die gemessene Verzerrung beim Sprung liegt schon ab Ebene 3 im Rauschen (eine Kontrollrechnung mit gemeinsamen äußeren Ziehungen, nicht Teil der Demo, ergibt etwa 2^(−1,6) je Ebene).
 Die Fortsetzung der Varianzen jenseits der gemessenen Ebenen nimmt die geschätzte Rate an. Die Ein-Term-Varianzen stammen aus den gemessenen zweiten Momenten; der Lauf in Experiment 5 prüft sie an einem Fall, und bei wachsender Varianz ist die Stichprobenvarianz selbst unzuverlässig.
 Die Rate ε^(−2−1/α) und die Sätze zu Multilevel stehen im Mathematik-Expander aus dem Gedächtnis; die Quellen (Hironaka, Giles, Goda und Thom; Rainforth u. a.) sind nur im Abstract eingesehen. Die Oberfläche ist mit AppTest geprüft und im Browser angesehen, nicht mit echtem Mausklick auf jedem Gerät.
         """
@@ -280,7 +280,7 @@ Exakt: $\mathbb E\mu(X)^2$ per Gauß–Hermite; $\int_{x^*}^\infty(\mu-k)\varphi
 Beim Quadrat: $Y_l=-(\bar g^a-\bar g^b)^2/4$, $\mathbb E Y_l=-\mathbb E\operatorname{Var}(g\mid X)/2^l$. Optimale Zuteilung wie in Stück 12 mit $C_l=2^l$: $N_l=2\varepsilon^{-2}\sqrt{V_l/C_l}\sum_k\sqrt{V_kC_k}$, Kosten $2\varepsilon^{-2}(\sum_l\sqrt{V_lC_l})^2$.
 Dreifallunterscheidung (aus dem Gedächtnis, nicht aus dem Volltext; die Demo misst sie): $V_l\propto2^{-\beta l}$, $C_l\propto2^{\gamma l}$ mit $\gamma=1$: $\beta>\gamma$ gibt $\varepsilon^{-2}$, $\beta=\gamma$ gibt $\varepsilon^{-2}$ mal Logarithmen, $\beta<\gamma$ gibt $\varepsilon^{-2-(\gamma-\beta)/\alpha}$.
 
-**Warum die Antithetik.** Der Fehler der inneren Mittelung hat in erster Näherung ein Vorzeichen, das sich zwischen den Hälften aufhebt; bei glattem $f$ bleibt nur ein Term zweiter Ordnung ($\beta=2$), bei Lipschitz-stetigem $f$ ($\beta=3/2$ gemessen), beim Indikator nur $\beta\approx1/2$.
+**Warum die Antithetik.** Der Fehler der inneren Mittelung hat in erster Näherung ein Vorzeichen, das sich zwischen den Hälften aufhebt; bei glattem $f$ bleibt nur ein Term zweiter Ordnung ($\beta=2$), bei Lipschitz-stetigem $f$ (Theorie $\beta=3/2$, gemessen $\beta\approx1{,}3$ bis $1{,}4$), beim Indikator nur $\beta\approx1/2$.
 
 **Bedingt.** Wäre $\mu$ bekannt: $N=2\operatorname{Var}f(\mu(X))\,\varepsilon^{-2}$ Ziehungen zu je einer Auswertung.
 

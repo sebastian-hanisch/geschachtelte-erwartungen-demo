@@ -285,7 +285,7 @@ def verdict_levels(a: Analysis) -> tuple[str, str]:
     b = a.beta_by_variant
     kurt = max((r["kurt"] for r in a.levels[1:] if np.isfinite(r["kurt"])), default=float("nan"))
     return "info", (f"Rate β der Ebenenvarianz (aus den Ebenen {C.FIT_FROM} bis {last}): antithetisch {_rate_text(b['anti'])}, einseitig {_rate_text(b['one'])}, unabhängig {_rate_text(b['indep'])}. "
-                    f"Die Verzerrung halbiert sich je Ebene (≈ {de(a.c, 4)}/M). Größte Kurtosis der Differenz (gewählte Kopplung): {dn(kurt, 0)} (je größer, desto unsicherer die Schätzung von V_l aus {de(a.n, 0)} äußeren Ziehungen).")
+                    f"Die Verzerrung fällt je Ebene etwa auf die Hälfte (≈ {de(a.c, 4)}/M; beim Mittelwert exakt, beim Sprung im Rauschen kaum messbar). Größte Kurtosis der Differenz (gewählte Kopplung): {dn(kurt, 0)} (je größer, desto unsicherer die Schätzung von V_l aus {de(a.n, 0)} äußeren Ziehungen).")
 
 
 def verdict_cost(a: Analysis) -> tuple[str, str]:

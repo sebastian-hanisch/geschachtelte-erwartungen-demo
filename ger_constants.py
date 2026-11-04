@@ -43,9 +43,9 @@ PRESETS = {
     "Schwaches Signal": {"ausgabe": "glatt", "kopplung": DEFAULT_KOPPLUNG, "rho": 0.3, "eps": 0.0025, "lmax": 8, "seed": DEFAULT_SEED},
 }
 PRESET_HELP = {
-    "Standardfall (Voreinstellung)": "Äußere Funktion (m − k)⁺ mit Schwelle k beim Mittel, Signalstärke 0,6, antithetische Kopplung, Toleranz 0,005: Multilevel ist bei dieser Toleranz noch nicht billiger als einfaches Schachteln, bei engerer deutlich.",
+    "Standardfall (Voreinstellung)": "Äußere Funktion (m − k)⁺ mit Schwelle k beim Mittel, Signalstärke 0,6, antithetische Kopplung, Toleranz 0,005: Idealisiert ist Multilevel hier schon billiger als einfaches Schachteln (geschachtelt/Multilevel 2,18); mit dem Pilot des adaptiven Verfahrens (Experiment 3) noch nicht (0,81).",
     "Mittelwert: Multilevel rettet das Schachteln": "Bei f(m) = m², starkem Signal und Toleranz 0,0025 fällt die Ebenenvarianz mit 2^(−2l): Multilevel kostet einen Bruchteil des geschachtelten Monte Carlo.",
-    "Sprung: Multilevel verliert": "Bei einem Indikator als äußerer Funktion fällt die Ebenenvarianz nur mit 2^(−l/2): Multilevel ist im Idealfall teurer als einfaches Schachteln.",
+    "Sprung: Multilevel verliert": "Bei einem Indikator als äußerer Funktion fällt die Ebenenvarianz nur mit etwa 2^(−l/2): Multilevel ist bei dieser Toleranz und Signalstärke im Idealfall teurer als einfaches Schachteln.",
     "Ohne Antithetik": "Benutzt die grobe Stufe nur die erste Hälfte der inneren Ziehungen, fällt die Ebenenvarianz nur mit 2^(−l) statt 2^(−2l): der Gewinn schrumpft oder verschwindet.",
     "Schwaches Signal": "Bei ρ = 0,3 ist das innere Rauschen groß: die Ebene 0 dominiert und Multilevel lohnt erst bei sehr enger Toleranz.",
 }
