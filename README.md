@@ -1,7 +1,6 @@
 # Geschachtelte Erwartungen: was der Erwartungswert über einen Erwartungswert kostet – Streamlit-Demo
 
-<!-- TODO nach dem Deploy: direkt hierher den Live-Link setzen (Leerzeile davor und danach):
-**[→ Demo live ausprobieren](https://sebastianhanisch-geschachtelte-erwartungen-demo.streamlit.app/)** -->
+**[→ Demo live ausprobieren](https://sebastianhanisch-geschachtelte-erwartungen-demo.streamlit.app/)**
 
 Dreizehntes Stück der Linie **„Monte-Carlo-Schätzung und Varianzreduktion“** in der „Konzepte“-Reihe für die Website „Sebastian Hanisch – Operations Research und Machine Learning“ (die Linie wird erst vollständig veröffentlicht). Nachfolger von [multilevel-monte-carlo-demo](https://github.com/sebastian-hanisch/multilevel-monte-carlo-demo) (Stück 12, Multilevel über Zeitschritte): Hier geht es um **E_X[ f( E_Y[ g(X, Y) | X ] ) ]**, einen Erwartungswert über eine nichtlineare Funktion einer inneren bedingten Erwartung, und um die Frage, wann der **Multilevel-Schätzer** (Ebenen über die Zahl der inneren Ziehungen) das geschachtelte Monte Carlo rettet. Vehikel ist die log-normale Nachfrage der Stücke 11 und 12 als **zweistufiges Modell** mit Signal (außen) und innerem Rauschen; die bedingte Erwartung ist geschlossen bekannt und dient nur als Orakel.
 
@@ -121,4 +120,4 @@ Gebaut mit Streamlit, Plotly, NumPy und fpdf2.
 
 ---
 
-Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zu den Demos: [Interaktive Demos](https://sebastianhanisch.net/demos.html).
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Monte-Carlo-Schätzung: vom Schätzer zur Wahl](https://sebastianhanisch.net/konzepte-monte-carlo.html).
