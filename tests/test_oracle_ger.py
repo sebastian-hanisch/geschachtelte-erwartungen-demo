@@ -139,3 +139,36 @@ def test_zufaellige_stoerung_der_zuteilung_ist_nie_billiger():
         var = sum(v / n for v, n in zip(vl, trial))
         trial = trial * var / (eps**2 / 2)
         assert sum(n * c for n, c in zip(trial, cl)) >= cost * (1 - 1e-9)
+
+
+def _sprung_verzerrung_mal_m(level, n_total, chunk):
+    """Verzerrung E 1[Mittel von M > k] − P(X > x*) mal M, mit gemeinsamen äußeren Ziehungen (Differenz klein, daher genau); Kontrollrechnung, nicht Teil der Demo."""
+    rho, sigma, q = 0.6, 0.5, 1.3
+    k = A.k_default(sigma, q)
+    xs = A.x_star(k, rho, sigma, q)
+    M = 2**level
+    s, done, c = 0.0, 0, 0
+    while done < n_total:
+        n = min(chunk, n_total - done)
+        seed = A.stream_seed(2024, level, c)
+        X = A.normals(A.stream_seed(seed, 1), n)
+        G = A.inner_values(seed, n, M, rho, sigma, q)
+        s += float(((G.mean(axis=1) > k).astype(float) - (X > xs).astype(float)).sum())
+        done += n
+        c += 1
+    return s / n_total * M
+
+
+def test_sprung_verzerrung_ist_kein_c_durch_m_und_die_konstante_der_demo_ist_zu_gross():
+    """README (Sprung): Verzerrung mal M fällt von 0,118 (M = 1) auf etwa 0,06 (M = 8) und 0,03 (M = 32); die Konstante c der Demo (Median über die Ebenen 2 bis 5) ist rund 0,1,
+    also bei großem M ein Mehrfaches der wahren Verzerrung mal M."""
+    import ger_evaluation as ev
+    b0 = _sprung_verzerrung_mal_m(0, 1_000_000, 500_000)
+    b3 = _sprung_verzerrung_mal_m(3, 1_000_000, 250_000)
+    b5 = _sprung_verzerrung_mal_m(5, 600_000, 100_000)
+    assert b0 == pytest.approx(-0.118, abs=0.01) and b3 == pytest.approx(-0.060, abs=0.02)
+    assert abs(b3) < 0.7 * abs(b0)
+    assert abs(b5) < 0.07
+    a = ev.analyse(ev.Settings(ausgabe="sprung", lmax=8))
+    assert a.c == pytest.approx(0.105, abs=0.03)
+    assert a.c > 2.0 * abs(b5)
